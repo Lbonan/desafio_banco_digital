@@ -15,6 +15,20 @@ public class MenuService {
    private final Banco banco = new Banco();
    private final Scanner sc = new Scanner(System.in);
 
+    private Conta buscarContaPorNumero(){
+        System.out.println("Informe o numero da Conta: ");
+        int numero = sc.nextInt();
+        sc.nextLine();
+
+        Conta conta = banco.buscarConta(numero);
+
+        if(conta == null){
+            System.out.println("Conta inexistente");
+        }
+
+        return conta;
+    }
+
     public void iniciar(){
         boolean executando = true;
 
@@ -99,28 +113,18 @@ public class MenuService {
     }
 
     public void depositar(){
-        System.out.println("Informe o numero da Conta: ");
-        int numero = sc.nextInt();
-        sc.nextLine();
-        Conta conta = banco.buscarConta(numero);
-
+        Conta conta = buscarContaPorNumero();
         if(conta == null){
-            System.out.println("Conta inexistente");
             return;
         }
-
         System.out.println("Valor do deposito: ");
         double valor = sc.nextDouble();
         conta.depositar(valor);
     }
     public void sacar(){
-        System.out.println("Informe o numero da Conta: ");
-        int numero = sc.nextInt();
-        sc.nextLine();
-        Conta conta = banco.buscarConta(numero);
+        Conta conta = buscarContaPorNumero();
 
         if(conta == null){
-            System.out.println("Conta inexistente");
             return;
         }
         System.out.println("Valor da saque: ");
@@ -156,34 +160,27 @@ public class MenuService {
 
     }
     public void mostrarHistorico(){
-       System.out.println("Informe o numero da Conta: ");
-       int numero = sc.nextInt();
-       sc.nextLine();
-        Conta conta = banco.buscarConta(numero);
+        Conta conta = buscarContaPorNumero();
 
         if(conta == null){
-            System.out.println("Conta inexistente");
+            return;
         }
-
-        assert conta != null;
         conta.exibirHistorico();
     }
     public void imprimirExtrato(){
-        System.out.println("Informe o numero da Conta: ");
-        int numero = sc.nextInt();
-        sc.nextLine();
-
-        Conta conta = banco.buscarConta(numero);
+        Conta conta = buscarContaPorNumero();
 
         if(conta == null){
-            System.out.println("Conta inexistente");
             return;
         }
         conta.imprimirInformacoes();
     }
     public void excluirConta(){
-        System.out.println("Informe o numero da Conta: ");
-        int numero = sc.nextInt();
-        banco.removerConta(numero);
+        Conta conta = buscarContaPorNumero();
+
+        if(conta == null){
+            return;
+        }
+        banco.removerConta(conta);
     }
 }

@@ -35,8 +35,8 @@ public class Banco {
     public void adicionarCliente(Cliente cliente) {
         clientes.add(cliente);
     }
-    public void removerConta(int numero) {
-        contas.remove(buscarConta(numero));
+    public void removerConta(Conta conta) {
+        contas.remove(conta);
         System.out.println("Conta removida com sucesso!");
     }
 
