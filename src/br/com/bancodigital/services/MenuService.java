@@ -7,6 +7,7 @@ import br.com.bancodigital.models.Conta;
 import br.com.bancodigital.models.ContaCorrente;
 import br.com.bancodigital.models.ContaPoupanca;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 
@@ -27,6 +28,12 @@ public class MenuService {
         }
 
         return conta;
+    }
+
+    private BigDecimal lerValor(){
+        String valor = sc.nextLine().replace(",",".");
+         return new BigDecimal(valor);
+
     }
 
     public void iniciar(){
@@ -118,8 +125,7 @@ public class MenuService {
             return;
         }
         System.out.println("Valor do deposito: ");
-        double valor = sc.nextDouble();
-        conta.depositar(valor);
+        conta.depositar(lerValor());
     }
     public void sacar(){
         Conta conta = buscarContaPorNumero();
@@ -128,8 +134,7 @@ public class MenuService {
             return;
         }
         System.out.println("Valor da saque: ");
-        double valor = sc.nextDouble();
-        conta.sacar(valor);
+        conta.sacar(lerValor());
     }
     public void transferir(){
         System.out.println("Informe o numero da Conta: ");
@@ -154,9 +159,8 @@ public class MenuService {
 
         }
         System.out.println("Valor da transferencia: :");
-        double valor = sc.nextDouble();
 
-        contaOrigem.transferir(valor, contaDestino);
+        contaOrigem.transferir(lerValor(), contaDestino);
 
     }
     public void mostrarHistorico(){

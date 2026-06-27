@@ -2,6 +2,7 @@ package br.com.bancodigital.models;
 
 import br.com.bancodigital.interfaces.IConta;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public abstract class Conta implements IConta {
 
     protected int agencia;
     protected int numero;
-    private double saldo;
+    private BigDecimal saldo =  BigDecimal.ZERO;
     protected Cliente cliente;
 
     public Conta (Cliente cliente) {
@@ -22,8 +23,8 @@ public abstract class Conta implements IConta {
         this.numero = NUMERO++;
     }
 
-    private boolean validaValor(double valor){
-        if(valor <= 0){
+    private boolean validaValor(BigDecimal valor){
+        if(valor.compareTo(BigDecimal.ZERO) == 0){
             System.out.println("Valor inválido");
             return false;
         }
@@ -31,40 +32,40 @@ public abstract class Conta implements IConta {
     }
 
     @Override
-    public void sacar(double valor) {
+    public void sacar(BigDecimal valor) {
         if(!validaValor(valor)){
             return;
         };
-        if(valor > saldo) {
+        if(valor.compareTo(saldo) > 1) {
             System.out.println("Saldo insuficiente!");
             return;
         }
-        this.saldo -= valor;
+        this.saldo =  this.saldo.subtract(valor);
         System.out.println("Saque realizado com sucesso");
         historico.add("[" + LocalDateTime.now() + "]" +"Saque de R$ " + valor);
         System.out.println("Saldo atual: " + this.saldo);
     }
 
     @Override
-    public void depositar(double valor) {
+    public void depositar(BigDecimal valor) {
         if(!validaValor(valor)) {
             return;
         }
-       this.saldo += valor;
+       this.saldo = this.saldo.add(valor);
        historico.add("[" + LocalDateTime.now() + "]" +"Depósito de R$ " + valor);
        System.out.println("Depósito realizado com sucesso!");
     }
 
     @Override
-    public void transferir(double valor, Conta destino) {
+    public void transferir(BigDecimal valor, Conta destino) {
         if(!validaValor(valor)) {
             return;
         }
-        if(valor > saldo) {
+        if(valor.compareTo(saldo) == 1) {
             System.out.println("Saldo insuficiente!");
             return;
         }
-        this.saldo -= valor;
+        this.saldo =  this.saldo.subtract(valor);
         destino.depositar(valor);
 
         historico.add("Transferência enviada de R$ " + valor);
@@ -81,7 +82,7 @@ public abstract class Conta implements IConta {
         return numero;
     }
 
-    public double getSaldo() {
+    public BigDecimal getSaldo() {
         return saldo;
     }
 
